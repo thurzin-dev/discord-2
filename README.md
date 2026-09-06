@@ -40,3 +40,11 @@ Abra http://localhost:8142/ (localhost conta como contexto seguro, então o micr
 - Malha P2P: cada pessoa envia seu áudio para todas as outras. Fica pesado acima de ~8 pessoas com tela.
 - Depende da nuvem gratuita do PeerJS para sinalização. Se ela cair, ninguém consegue *entrar* (chamadas já abertas continuam).
 - Não há gravação, nem cargos, nem servidor persistente. É uma sala de voz.
+
+## Teste ponta-a-ponta (3 Chromes headless com microfone falso)
+
+```bash
+npm i puppeteer-core@23 && node test/e2e.js https://thurzin-dev.github.io/discord-2/ --simultaneous
+```
+
+Mede bytes/nível de áudio recebido em cada par, chat, mute, tela e saída. Precisa do Chrome instalado no caminho padrão.
