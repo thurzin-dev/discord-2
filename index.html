@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>Discord 2</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235865F2'/%3E%3Ctext x='32' y='43' font-size='30' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3ED2%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= LOBBY ================= -->
+<section id="lobby" class="screen">
+  <div class="lobby-card">
+    <div class="brand">
+      <div class="brand-logo">D2</div>
+      <div>
+        <h1>Discord 2</h1>
+        <p class="brand-sub">Chamada de voz + tela, direto no navegador. Sem conta, sem instalar.</p>
+      </div>
+    </div>
+
+    <form id="join-form" autocomplete="off">
+      <label class="field">
+        <span>Seu nome</span>
+        <input id="name-input" type="text" maxlength="24" placeholder="Ex: Arthur" required>
+      </label>
+
+      <label class="field">
+        <span>Código da sala</span>
+        <div class="field-row">
+          <input id="room-input" type="text" maxlength="32" placeholder="Ex: galera" required>
+          <button type="button" id="random-room" class="btn ghost" title="Gerar código aleatório">🎲</button>
+        </div>
+        <small>Quem digitar o mesmo código entra na mesma call. Você pode mandar o link de convite depois.</small>
+      </label>
+
+      <div class="field">
+        <span>Microfone</span>
+        <div class="field-row">
+          <select id="lobby-mic-select"></select>
+          <button type="button" id="lobby-mic-test" class="btn ghost">Testar</button>
+        </div>
+        <div class="meter"><div id="lobby-meter-bar" class="meter-bar"></div></div>
+        <small id="lobby-mic-status">Clique em "Testar" para liberar o microfone e ver se ele capta sua voz.</small>
+      </div>
+
+      <button type="submit" id="join-btn" class="btn primary big">Entrar na call</button>
+      <p id="lobby-error" class="error" hidden></p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= CALL ================= -->
+<section id="call" class="screen" hidden>
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div class="brand-logo small">D2</div>
+      <div class="room-info">
+        <div class="room-label">Sala</div>
+        <div id="room-name" class="room-name">—</div>
+      </div>
+    </div>
+
+    <button id="invite-btn" class="btn ghost full">🔗 Copiar link de convite</button>
+    <div id="conn-status" class="conn-status">Conectando…</div>
+
+    <div class="participants-head">
+      Na call — <span id="participant-count">0</span>
+    </div>
+    <ul id="participants" class="participants"></ul>
+  </aside>
+
+  <main class="main">
+    <div id="stage" class="stage">
+      <div id="stage-empty" class="stage-empty">
+        <div class="stage-empty-icon">🖥️</div>
+        <p>Ninguém está compartilhando a tela.</p>
+        <p class="dim">Clique em <b>Compartilhar tela</b> abaixo para mostrar seu jogo ou janela para todos.</p>
+      </div>
+    </div>
+
+    <div id="banner" class="banner" hidden></div>
+
+    <div class="controls">
+      <button id="mic-btn" class="ctl" title="Mutar / desmutar (M)">
+        <span class="ctl-icon">🎙️</span><span class="ctl-label">Mic</span>
+      </button>
+      <button id="deafen-btn" class="ctl" title="Ensurdecer (não ouvir ninguém)">
+        <span class="ctl-icon">🎧</span><span class="ctl-label">Áudio</span>
+      </button>
+      <button id="share-btn" class="ctl" title="Compartilhar tela">
+        <span class="ctl-icon">🖥️</span><span class="ctl-label">Compartilhar tela</span>
+      </button>
+      <button id="settings-btn" class="ctl" title="Configurações de áudio">
+        <span class="ctl-icon">⚙️</span><span class="ctl-label">Ajustes</span>
+      </button>
+      <button id="chat-toggle-btn" class="ctl" title="Abrir / fechar chat">
+        <span class="ctl-icon">💬</span><span class="ctl-label">Chat</span>
+      </button>
+      <button id="leave-btn" class="ctl danger" title="Sair da call">
+        <span class="ctl-icon">📞</span><span class="ctl-label">Sair</span>
+      </button>
+    </div>
+  </main>
+
+  <aside id="chat" class="chat">
+    <div class="chat-head">Chat da sala</div>
+    <div id="chat-log" class="chat-log"></div>
+    <form id="chat-form" class="chat-form" autocomplete="off">
+      <input id="chat-input" type="text" maxlength="500" placeholder="Mensagem…">
+      <button type="submit" class="btn primary">Enviar</button>
+    </form>
+  </aside>
+</section>
+
+<!-- ================= SETTINGS MODAL ================= -->
+<div id="settings-modal" class="modal" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2>Ajustes de áudio</h2>
+      <button id="settings-close" class="btn ghost" title="Fechar">✕</button>
+    </div>
+    <label class="field">
+      <span>Microfone</span>
+      <select id="mic-select"></select>
+    </label>
+    <div class="field">
+      <span>Nível do seu microfone</span>
+      <div class="meter"><div id="settings-meter-bar" class="meter-bar"></div></div>
+      <small>Fale algo: a barra deve se mexer. Se não mexer, troque o microfone acima.</small>
+    </div>
+    <label class="field">
+      <span>Qualidade da tela compartilhada</span>
+      <select id="share-quality">
+        <option value="720">720p · 30 fps (recomendado)</option>
+        <option value="1080">1080p · 30 fps (precisa de boa internet)</option>
+        <option value="480">480p · 30 fps (internet fraca)</option>
+      </select>
+      <small>Vale para a próxima vez que você compartilhar.</small>
+    </label>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.5/peerjs.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
