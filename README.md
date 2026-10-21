@@ -4,6 +4,8 @@ Chamada de voz + compartilhamento de tela + chat, direto no navegador, sem conta
 
 **No ar:** https://thurzin-dev.github.io/discord-2/
 
+> Também neste repo: [Carga](academia/), app de progresso de carga na academia → https://thurzin-dev.github.io/discord-2/academia/
+
 ## Como usar
 
 1. Abra o link, digite seu nome e um código de sala (ex.: `galera`).

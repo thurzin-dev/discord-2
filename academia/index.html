@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Carga">
+  <title>Carga</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main id="screen" class="screen"></main>
+
+    <nav id="tabbar" class="tabbar">
+      <div class="tab-blob" id="tabBlob"></div>
+      <button class="tab" data-tab="home"><span class="ti" data-icon="home"></span><span class="tl">Início</span></button>
+      <button class="tab" data-tab="progress"><span class="ti" data-icon="chart"></span><span class="tl">Progresso</span></button>
+      <button class="tab tab-go" data-tab="train" aria-label="Treinar"><span class="go-btn"><span class="ti" data-icon="dumbbell"></span></span></button>
+      <button class="tab" data-tab="body"><span class="ti" data-icon="body"></span><span class="tl">Corpo</span></button>
+      <button class="tab" data-tab="profile"><span class="ti" data-icon="user"></span><span class="tl">Perfil</span></button>
+    </nav>
+  </div>
+
+  <div id="workout" class="workout" hidden></div>
+  <div id="sheets"></div>
+  <div id="toasts" class="toasts"></div>
+  <canvas id="confetti" class="confetti"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
