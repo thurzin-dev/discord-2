@@ -48,6 +48,7 @@ const ui = {
   micBtn: $('mic-btn'), deafenBtn: $('deafen-btn'), shareBtn: $('share-btn'),
   settingsBtn: $('settings-btn'), chatToggleBtn: $('chat-toggle-btn'), leaveBtn: $('leave-btn'),
   chatLog: $('chat-log'), chatForm: $('chat-form'), chatInput: $('chat-input'),
+  chatClose: $('chat-close'), chatBadge: $('chat-badge'),
   settingsModal: $('settings-modal'), settingsClose: $('settings-close'),
   micSelect: $('mic-select'), settingsMeter: $('settings-meter-bar'), shareQuality: $('share-quality'),
   toast: $('toast'),
@@ -986,6 +987,7 @@ async function leaveRoom(silent) {
   state.deafened = false;
   state.reconnectTries = 0;
   ui.chatLog.innerHTML = '';
+  unreadChat = 0; updateChatBadge();
   ui.participants.innerHTML = '';
   setBanner('');
   state.inCall = false;
@@ -1046,7 +1048,8 @@ ui.micBtn.addEventListener('click', async () => {
 ui.deafenBtn.addEventListener('click', () => setDeafened(!state.deafened));
 ui.shareBtn.addEventListener('click', () => { if (state.screenStream) stopScreenShare(); else startScreenShare(); });
 ui.leaveBtn.addEventListener('click', () => leaveRoom(false));
-ui.chatToggleBtn.addEventListener('click', () => ui.call.classList.toggle('chat-hidden'));
+ui.chatToggleBtn.addEventListener('click', () => setChatOpen(ui.call.classList.contains('chat-hidden')));
+ui.chatClose.addEventListener('click', () => setChatOpen(false));
 ui.settingsBtn.addEventListener('click', async () => {
   await listMics([ui.lobbyMicSelect, ui.micSelect]);
   ui.settingsModal.hidden = false;
@@ -1065,6 +1068,7 @@ ui.inviteBtn.addEventListener('click', async () => {
 document.addEventListener('keydown', (e) => {
   if (!state.inCall) return;
   const tag = (e.target && e.target.tagName) || '';
+  if (e.key === 'Escape' && isChatOverlay() && !ui.call.classList.contains('chat-hidden')) { setChatOpen(false); return; }
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
   if (e.key === 'm' || e.key === 'M') { if (state.micIsReal) setMuted(!state.muted); }
 });
@@ -1101,9 +1105,26 @@ ui.chatForm.addEventListener('submit', (e) => {
   if (!text) return;
   ui.chatInput.value = '';
   broadcast({ type: 'chat', text });
-  addChatMessage(state.name + ' (você)', text);
+  addChatMessage(state.name + ' (você)', text, true);
 });
-function addChatMessage(who, text) {
+let unreadChat = 0;
+const isChatOverlay = () => window.matchMedia('(max-width: 900px)').matches;
+function setChatOpen(open) {
+  ui.call.classList.toggle('chat-hidden', !open);
+  if (open) {
+    unreadChat = 0;
+    updateChatBadge();
+    ui.chatLog.scrollTop = ui.chatLog.scrollHeight;
+  } else if (isChatOverlay()) {
+    ui.chatInput.blur(); // fecha o teclado do celular
+  }
+}
+function updateChatBadge() {
+  ui.chatBadge.hidden = unreadChat === 0;
+  ui.chatBadge.textContent = unreadChat > 99 ? '99+' : String(unreadChat);
+}
+function addChatMessage(who, text, mine) {
+  if (!mine && ui.call.classList.contains('chat-hidden')) { unreadChat++; updateChatBadge(); }
   const div = document.createElement('div');
   div.className = 'msg';
   div.innerHTML = `<span class="who">${escapeHtml(who)}</span>${escapeHtml(text)}<span class="when">${timeNow()}</span>`;

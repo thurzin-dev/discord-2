@@ -187,7 +187,14 @@ select option { background: var(--bg-1); }
 }
 .ctl:hover { background: #4e5058; }
 .ctl:active { transform: translateY(1px); }
+.ctl { position: relative; }
 .ctl-icon { font-size: 20px; line-height: 1.2; }
+.badge {
+  position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 9px; background: var(--red); color: #fff; font-size: 11px; font-weight: 800;
+  line-height: 18px; text-align: center; box-shadow: 0 0 0 3px var(--bg-2);
+}
+.badge[hidden] { display: none; }
 .ctl-label { font-size: 11px; color: var(--text-dim); font-weight: 600; }
 .ctl.off { background: var(--red); }
 .ctl.off:hover { background: var(--red-hover); }
@@ -210,6 +217,7 @@ select option { background: var(--bg-1); }
 .msg.sys { color: var(--text-dim); font-size: 13px; font-style: italic; }
 .chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #0004; }
 .chat-form input { flex: 1; min-width: 0; }
+.chat-close { display: none; padding: 4px 10px; }
 
 /* ---------- Modal ---------- */
 .modal { position: fixed; inset: 0; background: #000a; display: grid; place-items: center; z-index: 40; padding: 20px; }
@@ -226,8 +234,17 @@ select option { background: var(--bg-1); }
   .btn.full { width: auto; }
   .participants-head { width: 100%; margin: 0; }
   .participants { width: 100%; flex: none; max-height: 150px; }
-  .chat { position: fixed; inset: 0; z-index: 30; }
+  /* chat vira uma tela por cima da call, com botão de fechar */
+  .chat {
+    position: fixed; inset: 0; z-index: 30; border-left: 0;
+    height: 100vh; height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
   #call.chat-hidden .chat { display: none; }
+  .chat-close { display: inline-flex; }
+  .chat-form { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  /* 16px evita o zoom automático do iPhone ao tocar no campo */
+  .chat-form input { font-size: 16px; }
   .ctl { min-width: 60px; padding: 8px 10px; }
   .ctl-label { display: none; }
 }

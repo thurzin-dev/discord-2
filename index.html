@@ -97,7 +97,7 @@
         <span class="ctl-icon">⚙️</span><span class="ctl-label">Ajustes</span>
       </button>
       <button id="chat-toggle-btn" class="ctl" title="Abrir / fechar chat">
-        <span class="ctl-icon">💬</span><span class="ctl-label">Chat</span>
+        <span class="ctl-icon">💬</span><span class="ctl-label">Chat</span><span id="chat-badge" class="badge" hidden>0</span>
       </button>
       <button id="leave-btn" class="ctl danger" title="Sair da call">
         <span class="ctl-icon">📞</span><span class="ctl-label">Sair</span>
@@ -106,10 +106,13 @@
   </main>
 
   <aside id="chat" class="chat">
-    <div class="chat-head">Chat da sala</div>
+    <div class="chat-head">
+      <span>Chat da sala</span>
+      <button type="button" id="chat-close" class="btn ghost chat-close" title="Fechar chat" aria-label="Fechar chat">✕</button>
+    </div>
     <div id="chat-log" class="chat-log"></div>
     <form id="chat-form" class="chat-form" autocomplete="off">
-      <input id="chat-input" type="text" maxlength="500" placeholder="Mensagem…">
+      <input id="chat-input" type="text" maxlength="500" placeholder="Mensagem…" enterkeyhint="send">
       <button type="submit" class="btn primary">Enviar</button>
     </form>
   </aside>
